@@ -95,7 +95,10 @@ function App() {
               </div>
               <div className="grid grid-cols-7 grid-rows-1 gap-4">
                 {["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"].map((day) => (
-                  <div className="bg-gray-500 py-2 lg:text-xl text-sm text-white text-center" key={day}>
+                  <div
+                    className="bg-gradient-to-r from-sky-600 from-10% via-cyan-600 via-30% to-emerald-200 to-90% py-2 lg:text-xl text-sm text-white text-center"
+                    key={day}
+                  >
                     {day}
                   </div>
                 ))}
