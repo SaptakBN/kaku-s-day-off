@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
+import { Schedule } from "../interfaces/schedule.interface";
 import { DutyPattern } from "../enums/duty-pattern.enum";
 import dutyJson from "../../assets/dutyPattern.json";
-import { Schedule } from "../interfaces/schedule.interface";
 
 export const getDutySchedule = (startDate: Dayjs, todayDuty: DutyPattern): Schedule[][] => {
   const dutyPattern: ReadonlyArray<DutyPattern> = dutyJson["duty-pattern"] as DutyPattern[];
@@ -9,15 +9,25 @@ export const getDutySchedule = (startDate: Dayjs, todayDuty: DutyPattern): Sched
 
   if (todayIndex === -1) {
     alert("Invalid duty type. Valid types are: off, morning, full day, night.");
+    return [];
   }
 
   const schedule: Schedule[][] = [];
-  const todayDate = dayjs(startDate).startOf("month").format("YYYY-MM-DD");
+  const startOfMonth = dayjs(startDate).startOf("month");
+  const todayDate = dayjs(startDate);
+  const daysDifference = todayDate.diff(startOfMonth, "day");
 
-  let currentDay = dayjs(todayDate);
+  // Derive the duty at the start of the month
+  const startMonthDutyIndex =
+    (todayIndex - (daysDifference % dutyPattern.length) + dutyPattern.length) % dutyPattern.length;
+  const startMonthDuty = dutyPattern[startMonthDutyIndex];
 
-  for (let i = 0; i < 365; i++) {
-    const dutyIndex = (todayIndex + i) % dutyPattern.length;
+  console.log(`Start of the month duty: ${startMonthDuty}`);
+
+  let currentDay = startOfMonth;
+
+  for (let i = 0; i < 396; i++) {
+    const dutyIndex = (startMonthDutyIndex + i) % dutyPattern.length;
     const prevDayMonth = dayjs(currentDay).subtract(1, "day").month();
     const currentDayMonth = dayjs(currentDay).month();
 
