@@ -1,0 +1,8 @@
+{
+    "duty-pattern": [
+        "off",
+        "full day",
+        "morning",
+        "night"
+    ]
+}
